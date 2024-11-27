@@ -1,0 +1,29 @@
+services:
+  consumer-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Release
+      - ASPNETCORE_HTTP_PORTS=8080
+    container_name: consumer-api
+    ports:
+      - "8080:8080"
+    image: consumer-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - mynetwork
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - mynetwork
+networks:
+  mynetwork:
+    driver: bridge
